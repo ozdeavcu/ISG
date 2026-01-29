@@ -1,0 +1,133 @@
+﻿.hc-file-preview {
+  position: relative;
+  margin-top: 20px;
+}
+
+.carousel-item .close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: transparent;
+  border: none;
+  font-size: 24px;
+  color: black;
+  cursor: pointer;
+  z-index: 9999;
+}
+
+.carousel-inner img {
+  max-height: 300px;
+  object-fit: cover;
+  width: 100%;
+}
+
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-color: black;
+}
+
+#startRecord {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #28a745;
+  border: none;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+  margin-bottom: 20px;
+}
+
+#deleteRecord {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ff6b6b;
+  border: none;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+#startRecord i {
+  font-size: 20px;
+}
+
+#startRecord.flash {
+  background-color: #dc3545;
+  animation: flashing 1s infinite alternate;
+}
+
+@keyframes flashing {
+  0% {
+    background-color: #dc3545;
+  }
+
+  50% {
+    background-color: #ff6b6b;
+  }
+
+  100% {
+    background-color: #dc3545;
+  }
+}
+
+.custom-audio-player {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  background-color: #2a2a2a;
+  border-radius: 10px;
+  padding: 7px 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.play-btn, .mute-btn {
+  background-color: transparent;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+  .play-btn:hover, .mute-btn:hover {
+    color: #ff6b6b;
+  }
+
+.progress-container {
+  flex: 1;
+  margin: 0 20px;
+}
+
+.progress-bar {
+  width: 100%;
+  background-color: #444;
+  height: 8px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+  .progress-bar::-webkit-slider-thumb {
+    width: 12px;
+    height: 12px;
+    background-color: #ff6b6b;
+    border-radius: 50%;
+    border: none;
+  }
+
+audio {
+  display: none;
+}

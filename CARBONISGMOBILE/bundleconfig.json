@@ -1,0 +1,6 @@
+[
+  {
+    "outputFileName": "wwwroot/js/Notification/notification.min.js",
+    "inputFiles": [ "wwwroot/js/Notification/notification.js" ]
+  }
+]

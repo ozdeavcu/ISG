@@ -1,0 +1,21 @@
+﻿@* <style>
+    .header-content .logo-wrapper a img
+    {
+        max-height:70px !important;
+    }
+</style> *@
+<div class="logo-wrapper">
+  @if (ViewData["CompanyLogoUrl"] != null)
+  {
+    var companyLogoBase64 = ViewData["CompanyLogoUrl"].ToString();
+    <a asp-controller="Home" asp-action="Index">
+            <img src="data:image/jpeg;base64,@companyLogoBase64" alt="Company Logo" >
+    </a>
+  }
+  else
+  {
+    <a asp-controller="Home" asp-action="Index">
+      <img src="~/assets/img/core-img/logo.png" alt="Default Logo">
+    </a>
+  }
+</div>

@@ -1,0 +1,74 @@
+﻿<!doctype html>
+<html lang="tr">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <title>{{Title}}</title>
+  <style>
+    body {
+      font-family: Helvetica, sans-serif;
+      background-color: #f4f5f6;
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 80%;
+      margin: 0 auto;
+      padding: 48px;
+      background-color: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 12px 15px rgba(0, 0, 0, 0.02);
+    }
+
+    h2 {
+      color: red;
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    p {
+      font-size: 16px;
+      color: #333;
+      text-align: center;
+    }
+
+    .otp-field {
+      flex-direction: row;
+      column-gap: 10px;
+      display: flex;
+      justify-content: center;
+      margin: 20px auto;
+    }
+
+    .footer {
+      text-align: center;
+      color: #9a9ea6;
+      font-size: 12px;
+      padding-top: 24px;
+    }
+
+      .footer p {
+        margin: 5px 0;
+      }
+  </style>
+</head>
+<body>
+  <table width="100%" style="background-color:white;">
+    <tr>
+      <td align="center">
+        <div class="container">
+          <h2>{{Title}}</h2>
+          <p>{{Message}}</p>
+          <p>Eğer daha fazla bilgiye ihtiyaç duyarsanız, aşağıdaki iletişim bilgilerimizi kullanarak bizimle iletişime geçebilirsiniz:</p>
+        </div>
+        <div class="footer">
+          <p>Bu e-posta size Obserway tarafından gönderilmiştir. Lütfen bu e-postaya yanıt vermeyin.</p>
+          <p>obserway@gmail.com | +0 (501) 068 23 93</p>
+        </div>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

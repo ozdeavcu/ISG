@@ -1,0 +1,211 @@
+﻿@model IncidentNotificationModel
+@inject IHttpContextAccessor HttpContextAccessor;
+@{
+  var userId = HttpContextAccessor.HttpContext?.User?.FindFirst("Id")?.Value;
+}
+
+@section BackButton {
+  @if (TempData["page"]?.ToString() == "Index")
+  {
+    <div class="back-button">
+      <a asp-controller="Home" asp-action="Index">
+        <i class="bi bi-arrow-left-short"></i>
+      </a>
+    </div>
+  }
+  else if (TempData["page"]?.ToString() == "List")
+  {
+    <div class="back-button">
+      <a asp-controller="Notification" asp-action="NotificationUserList" asp-route-type="@NotificationType.Incident">
+        <i class="bi bi-arrow-left-short"></i>
+      </a>
+    </div>
+  }
+  else
+  {
+    <div class="back-button">
+      <a asp-controller="Notification" asp-action="NotificationUserList" asp-route-type="@NotificationType.Incident">
+        <i class="bi bi-arrow-left-short"></i>
+      </a>
+    </div>
+  }
+
+
+
+}
+@section Links {
+  <link href="~/css/notification.css" rel="stylesheet" />
+}
+@section Scripts {
+  <script>
+    var isActive = '@Model.IsNameVisible.ToString().ToLower()';
+    const audioUrl = '@Model.AudioUrl';
+    document.getElementById('uploadForm').onsubmit = (event) => {
+      event.preventDefault();
+
+      const formData = new FormData(document.getElementById('uploadForm'));
+
+      if (audioBlob) {
+        formData.append('audioFile', audioBlob, 'recording.wav');
+      }
+
+      fetch('/Notification/IncidentSave', {
+        method: 'POST',
+        body: formData,
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            window.location.href = data.redirectUrl;
+          } else {
+            window.location.href = data.redirectUrl;
+          }
+        })
+        .catch(error => {
+          alert('Hata: ' + error.message);
+        });
+    };
+  </script>
+  <script src="~/js/notification/notification.min.js" asp-append-version="true"></script>
+}
+
+
+<div class="page-content-wrapper py-3">
+  <div class="container">
+    <!-- Checkout Wrapper -->
+    <div class="checkout-wrapper-area">
+      <div class="card">
+        <div class="card-body checkout-form">
+          <h6 class="mb-3">Olay Bildirim Formu </h6>
+
+          <form asp-controller="Notification" asp-action="IncidentSave" method="post" id="uploadForm">
+            <input type="hidden" asp-for="ID" value="@Model.ID" />
+            <input type="hidden" asp-for="UserID" value="@userId" />
+            <input type="hidden" asp-for="IsActive" value="@Model.IsActive" />
+            <input type="hidden" asp-for="CompanyID" value="@Model.CompanyID" />
+            <div class="form-group">
+              <h6 style="font-size:13px;">Ad Soyad</h6>
+              <input class="form-control mb-3" asp-for="FullName" type="text" value="@Model.FullName" readonly>
+            </div>
+            <div class="form-group">
+              <h6 style="font-size:13px;">Bildirim Tarihi</h6>
+              <input class="form-control mb-3" type="date" asp-for="ReportedAt" value="@Model.ReportedAt.ToString("yyyy-MM-dd")" placeholder="Bildirim Tarihi" readonly>
+            </div>
+            <div class="form-group">
+              <h6 style="font-size:13px;">Bildirim Saati</h6>
+              <input class="form-control mb-3" type="time" asp-for="ReportedAtTime" value="@Model.ReportedAtTime.ToString("HH:mm")" placeholder="Bildirim Saati" readonly>
+            </div>
+
+            <div class="form-group mt-2">
+              <h6 style="font-size:13px;">Olay Yeri</h6>
+              <input class="form-control mb-3" asp-for="IncidentLocation" id="IncidentLocation" name="IncidentLocation" value="@Model.IncidentLocation" placeholder="Olay Yeri" />
+            </div>
+            <div class="form-group">
+              <h6 style="font-size:13px;">Olay Tarihi</h6>
+              <input class="form-control mb-3" type="date" asp-for="IncidentDate" value="@Model.IncidentDate.ToString("yyyy-MM-dd")" placeholder="Tarihi" required>
+            </div>
+            <div class="form-group">
+              <h6 style="font-size:13px;">Olay Saati</h6>
+              <input class="form-control mb-3" type="time" asp-for="IncidentTime" value="@Model.IncidentTime.ToString("HH:mm")" placeholder="Saati" required>
+            </div>
+            <div class="form-group mt-2">
+              <h6 style="font-size:13px;">Bölüm</h6>
+              <input class="form-control mb-3" asp-for="IncidentSection" id="IncidentSection" name="IncidentSection" value="@Model.IncidentSection" placeholder="Bölüm" />
+            </div>
+
+            <div class="form-group">
+              <h6 style="font-size:13px;">Olayın Açıklaması</h6>
+              <textarea class="form-control mb-3" asp-for="IncidentDescription" id="notes" name="IncidentDescription" cols="30" rows="10"
+                        placeholder="Açıklama">@Model.IncidentDescription</textarea>
+            </div>
+
+            <div class="form-group">
+              <h6 style="font-size:13px;">Fotoğraflar</h6>
+              @if (Model.Photos != null && Model.Photos.Any())
+              {
+                <input class="form-control mb-3" type="file" name="MultiImages" accept="image/*" multiple disabled />
+              }
+              else
+              {
+                <input class="form-control mb-3" type="file" name="MultiImages" accept="image/*" multiple />
+              }
+
+              <!-- Preview container -->
+              <div class="hc-file-preview carousel slide" id="carouselPreview" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                  @if (Model.Photos != null && Model.Photos.Any())
+                  {
+                    foreach (var photo in Model.Photos)
+                    {
+                      <div class="carousel-item @(photo == Model.Photos.First() ? "active" : "")" data-photo-id="@photo.ID">
+                        <img class="d-block w-100" src="@Url.Content(photo.PhotoUrl)" alt="Önizleme Görseli">
+                        <button type="button" class="close-btn">&times;</button>
+                      </div>
+                    }
+                  }
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselPreview" data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Önceki</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselPreview" data-bs-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Sonraki</span>
+                </button>
+              </div>
+            </div>
+
+
+
+            <div class="d-flex">
+              @if (Model.AudioUrl == null || Model.AudioUrl == "")
+              {
+                <button id="startRecord" class="btn btn-success mt-3 btn-record"><i class="bi bi-mic"></i></button>
+                <button id="attachFile" class="btn btn-secondary mt-3 mx-3" title="Dosya Ekle"><i class="bi bi-paperclip"></i></button>
+                <input type="file" id="audioFileUpload" name="audioFile" accept="audio/*" style="display:none;" />
+                <button id="deleteRecord" class="btn btn-danger mt-3 btn-record mx-2"><i class="bi bi-trash"></i></button>
+              }
+              else
+              {
+                <button id="startRecord" class="btn btn-success mt-3 btn-record" disabled><i class="bi bi-mic"></i></button>
+                <button id="attachFile" class="btn btn-secondary mt-3 mx-3" title="Dosya Ekle" disabled><i class="bi bi-paperclip"></i></button>
+                <input type="file" id="audioFileUpload" name="audioFile" accept="audio/*" style="display:none;" disabled />
+                <button id="deleteRecord" class="btn btn-danger mt-3 btn-record mx-2" disabled><i class="bi bi-trash"></i></button>
+              }
+
+            </div>
+            <div class="custom-audio-player mb-3">
+              <button id="playPause" class="play-btn"><i class="bi bi-play-circle-fill"></i></button>
+              <div class="progress-container">
+                <input type="range" id="progress" class="progress-bar" value="0" step="1" min="0" max="100">
+              </div>
+              <audio id="audioPlayback" class="mt-3">
+                <source src="" id="audioSource" type="audio/wav">
+              </audio>
+              <button id="mute" class="mute-btn"><i class="bi bi-volume-up"></i></button>
+            </div>
+
+            <h6>İsim Bildirilsin Mi?</h6>
+            <div class="col-12">
+              <div class="form-check mb-2 ">
+                <input class="form-check-input" type="radio" asp-for="IsNameVisible" value="true" name="IsNameVisible" id="darkRadio1" checked>
+                <label class="form-check-label" for="darkRadio1">Evet</label>
+              </div>
+
+              <div class="form-check mb-2">
+                <input class="form-check-input" type="radio" asp-for="IsNameVisible" value="false" name="IsNameVisible" id="darkRadio2">
+                <label class="form-check-label" for="darkRadio2">Hayır</label>
+              </div>
+            </div>
+            <button class="btn btn-primary mt-3 w-100" type="submit"
+            @(Model.ID > 0 ? "disabled" : "")>
+              Gönder
+            </button>
+
+          
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

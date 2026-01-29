@@ -1,0 +1,243 @@
+﻿@using System.Security.Claims
+@{
+  var userName = User.Identity.IsAuthenticated
+      ? User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value
+      : "Misafir"; 
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Affan - PWA Mobile HTML Template">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <meta name="theme-color" content="#0134d4">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <!-- Title -->
+  <title>Affan - PWA Mobile HTML Template</title>
+
+  <!-- Favicon -->
+  <link rel="icon" href="img/core-img/favicon.ico">
+  <link rel="apple-touch-icon" href="img/icons/icon-96x96.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="img/icons/icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="167x167" href="img/icons/icon-167x167.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="img/icons/icon-180x180.png">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="~/assets/js/easypost.js"></script>
+  <!-- Style CSS -->
+  <link href="~/assets/css/style.css" rel="stylesheet" />
+  <!-- Web App Manifest -->
+  <style>
+    body.login-page #headerArea,
+    body.login-page #footerNav {
+      display: none;
+    }
+
+  </style>
+
+  @RenderSection("Links", required: false)
+</head>
+
+<body class="@ViewData["PageClass"]">
+  <!-- Preloader -->
+  <div id="preloader">
+    <div class="spinner-grow text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <!-- Internet Connection Status -->
+  <div class="internet-connection-status" id="internetStatus"></div>
+<!-- Header Area -->
+<div class="header-area" id="headerArea">
+  <div class="container">
+    <!-- Header Content -->
+
+    <div class="header-content header-style-six position-relative d-flex align-items-center justify-content-between">
+      <!-- Search -->
+      @RenderSection("BackButton", required: false)
+
+        <div class="logo-wrapper" id="dynamicLogo">
+
+        </div>
+
+
+      <!-- Navbar Toggler -->
+      <div class="navbar--toggler" id="affanNavbarToggler7" data-bs-toggle="offcanvas"
+           data-bs-target="#affanOffcanvas" aria-controls="affanOffcanvas">
+        <span class="d-block"></span>
+        <span class="d-block"></span>
+        <span class="d-block"></span>
+      </div>
+    </div>
+
+
+  </div>
+</div>
+
+
+
+  <!-- # Sidenav Left -->
+  <div class="offcanvas offcanvas-start" id="affanOffcanvas" data-bs-scroll="true" tabindex="-1"
+       aria-labelledby="affanOffcanvsLabel">
+
+    <button class="btn-close btn-close-white text-reset" type="button" data-bs-dismiss="offcanvas"
+            aria-label="Close"></button>
+
+    <div class="offcanvas-body p-0">
+      <div class="sidenav-wrapper">
+        <!-- Sidenav Profile -->
+        <div class="sidenav-profile bg-gradient">
+          <div class="sidenav-style1"></div>
+
+          <!-- User Thumbnail -->
+          <div class="user-profile">
+            <img src="img/bg-img/2.jpg" alt="">
+          </div>
+
+          <!-- User Info -->
+          <div class="user-info">
+            <h6 class="user-name mb-0">@userName</h6>
+            <span>Yazılım Geliştirici</span>
+          </div>
+        </div>
+
+        <!-- Sidenav Nav -->
+        <ul class="sidenav-nav ps-0">
+          <li>
+            <a asp-controller="Home" asp-action="Index"><i class="bi bi-house-door"></i> Anasayfa</a>
+          </li>
+          <li>
+            <a href="#">  <i class="bi bi-bell"></i> Bildirimlerim</a>
+            <ul>
+              <li>
+                <a asp-controller="Notification" asp-action="NotificationUserList" asp-route-type="@NotificationType.Infringement">Uygunsuzluk Ve Risk Bildirimi</a>
+              </li>
+              <li>
+                <a asp-controller="Notification" asp-action="NotificationUserList" asp-route-type="@NotificationType.NearMiss">Ramak Kala Bildirimi</a>
+              </li>
+              <li>
+                <a asp-controller="Notification" asp-action="NotificationUserList" asp-route-type="@NotificationType.ComplaintAndWish">Dilek ve Şİkayet Bildirimi</a>
+              </li>
+              <li>
+                <a asp-controller="Notification" asp-action="NotificationUserList" asp-route-type="@NotificationType.Incident">Olay Bildirimi</a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a asp-controller="User" asp-action="UserEdit"><i class="bi bi-gear"></i> Ayarlar</a>
+          </li>
+          <li>
+            <div class="night-mode-nav">
+              <i class="bi bi-moon"></i> Karanlık Mod
+              <div class="form-check form-switch">
+                <input class="form-check-input form-check-success" id="darkSwitch" type="checkbox">
+              </div>
+            </div>
+          </li>
+          <li>
+            <a asp-controller="Home" asp-action="Logout"><i class="bi bi-box-arrow-right"></i> Güvenli Çıkış</a>
+          </li>
+        </ul>
+
+        <!-- Social Info -->
+        <div class="social-info-wrap">
+          <a href="#">
+            <i class="bi bi-facebook"></i>
+          </a>
+          <a href="#">
+            <i class="bi bi-twitter"></i>
+          </a>
+          <a href="#">
+            <i class="bi bi-linkedin"></i>
+          </a>
+        </div>
+
+        <!-- Copyright Info -->
+        <div class="copyright-info">
+          <p>
+            <span id="copyrightYear"></span>
+            &copy; Made by <a href="#"> Hc Bilişim</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  @RenderBody()
+
+  <!-- Footer Nav -->
+  <div class="footer-nav-area @ViewData["PageClass"]" id="footerNav">
+    <div class="container px-0">
+      <!-- Footer Content -->
+      <div class="footer-nav position-relative">
+        <ul class="h-100 d-flex align-items-center justify-content-between ps-0">
+          <li class="active">
+            <a asp-controller="Home" asp-action="Index">
+              <i class="bi bi-house"></i>
+              <span>Anasayfa</span>
+            </a>
+          </li>
+
+          <li>
+            <a asp-controller="Home" asp-action="Pages">
+              <i class="bi bi-folder2-open"></i>
+              <span>Yönetim</span>
+            </a>
+          </li>
+
+          <li>
+            <a asp-controller="User" asp-action="UserEdit">
+              <i class="bi bi-gear"></i>
+              <span>Ayarlar</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- All JavaScript Files -->
+  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+  <script src="~/assets/js/bootstrap.bundle.min.js"></script>
+  <script src="~/assets/js/slidetoggle.min.js"></script>
+  <script src="~/assets/js/internet-status.js"></script>
+  <script src="~/assets/js/tiny-slider.js"></script>
+  <script src="~/assets/js/venobox.min.js"></script>
+  <script src="~/assets/js/countdown.js"></script>
+  <script src="~/assets/js/rangeslider.min.js"></script>
+  <script src="~/assets/js/vanilla-datatables.min.js"></script>
+  <script src="~/assets/js/index.js"></script>
+  <script src="~/assets/js/imagesloaded.pkgd.min.js"></script>
+  <script src="~/assets/js/isotope.pkgd.min.js"></script>
+  <script src="~/assets/js/dark-rtl.js"></script>
+  <script src="~/assets/js/active.js"></script>
+  <script src="~/assets/js/pwa.js"></script>
+  <script>
+
+      $(document).ready(function () {
+        $.ajax({
+          url: '/Home/Header', 
+          type: 'GET',
+          success: function (result) {
+            $('#dynamicLogo').html(result); 
+          },
+          error: function () {
+            console.error('Logo yüklenirken bir hata oluştu.');
+          }
+        });
+        });
+
+
+  </script>
+
+  @RenderSection("Scripts", required: false)
+</body>
+
+</html>

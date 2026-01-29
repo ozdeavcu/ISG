@@ -1,0 +1,73 @@
+﻿@model UserModel
+
+@section BackButton {
+  <div class="back-button">
+    <a asp-controller="Home" asp-action="Pages">
+      <i class="bi bi-arrow-left-short"></i>
+    </a>
+  </div>
+}
+
+<div class="page-content-wrapper py-3">
+  <div class="container">
+    <!-- User Information-->
+    <div class="card user-info-card mb-3">
+      <div class="card-body d-flex align-items-center">
+        <div class="user-profile me-3">
+          <img src="~/assets/img/bg-img/2.jpg" />
+          <i class="bi bi-pencil"></i>
+          <form action="#">
+            <input class="form-control" type="file">
+          </form>
+        </div>
+        <div class="user-info">
+          <div class="d-flex align-items-center">
+            <h5 class="mb-1">@Model.Name @Model.Surname</h5>
+           @*  <span class="badge bg-warning ms-2 rounded-pill">Pro</span> *@
+          </div>
+          <p class="mb-0">@Model.JobTitle</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- User Meta Data-->
+    <div class="card user-data-card">
+      <div class="card-body">
+        <form asp-controller="User" asp-action="UserUpdate" method="post">
+          <input type="hidden" asp-for="ID" value="@Model.ID" />
+          <div class="form-group mb-3">
+            <label class="form-label" for="fullname">Tc Kimlik</label>
+            <input class="form-control" id="fullname" type="text" value="@Model.IdentityNumber" readonly>
+          </div>
+          <div class="form-group mb-3">
+            <label class="form-label" for="email">Doğum Tarihi</label>
+            <input class="form-control" id="email" type="date" value="@((Model.DateOfBirth.HasValue) ? Model.DateOfBirth.Value.ToString("yyyy-MM-dd") : "")" readonly>
+          </div>
+          <div class="form-group mb-3">
+            <label class="form-label" for="email">Email Adres</label>
+            <input class="form-control" id="email" type="text" value="@Model.Email" readonly>
+          </div>
+
+          <div class="form-group mb-3">
+            <label class="form-label" for="Username">Kullanıcı Adı</label>
+            <input class="form-control" id="Username" asp-for="Username" name="Username" type="text" value="@Model.Username" placeholder="Kullanıcı Adı">
+          </div>
+          <div class="form-group mb-3">
+            <label class="form-label" for="Username">Telefon</label>
+            <input class="form-control" id="Username" asp-for="Phone" name="Phone" type="text" value="@Model.Phone" placeholder="Telefon">
+          </div>
+          <div class="form-group mb-3">
+            <label class="form-label" for="bio">Adres</label>
+            <textarea class="form-control" id="bio" asp-for="Address" name="Address" cols="30" rows="10"
+               placeholder="Adres">@Model.Address</textarea>
+          </div>
+
+          <button class="btn btn-success w-100" type="submit">Güncelle</button>
+        </form>
+      </div>
+    </div>
+
+
+
+  </div>
+</div>

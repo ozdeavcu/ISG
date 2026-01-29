@@ -1,0 +1,273 @@
+﻿    @model LoginViewModel
+
+    @section Links{
+    <style>
+        #headerArea, #footerNav {
+          display:none;
+        }
+
+            .login-wrapper .login-intro-img
+            {
+                max-height:6rem !important;
+            }
+        .hidden {
+          display: none;
+        }
+
+        .show {
+          display: block;
+        }
+
+        #backToLogin i {
+          margin-right: 5px;
+          font-size: 16px;
+          color: #071952;
+        }
+
+        .custom-input {
+          height: 60px;
+          width: 100%;
+          font-size: 16px;
+          border-radius: 10px;
+          padding: 10px 30px;
+        }
+    </style>
+    }
+    @section Scripts {
+      <script src="~/assets/js/otp-input-switch.js"></script>
+      <script src="~/assets/js/otp-timer.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+
+        document.getElementById("password-visibility").addEventListener("click", function () {
+          const passwordField = document.getElementById("password");
+          const type = passwordField.type === "password" ? "text" : "password";
+          passwordField.type = type;
+          this.classList.toggle("fa-eye-slash");
+        });
+
+        const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+        if (forgotPasswordLink) {
+          forgotPasswordLink.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.getElementById('loginFields').classList.add('hidden');
+            document.getElementById('loginFields').classList.remove('show');
+            document.getElementById('forgotPasswordFields').classList.add('show');
+            document.getElementById('forgotPasswordFields').classList.remove('hidden');
+            document.getElementById('formTitle').innerText = "Şifreni Sıfırla";
+          });
+        }
+
+        const backToLogin = document.getElementById('backToLogin');
+        if (backToLogin) {
+          backToLogin.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.getElementById('forgotPasswordFields').classList.add('hidden');
+            document.getElementById('forgotPasswordFields').classList.remove('show');
+            document.getElementById('loginFields').classList.add('show');
+            document.getElementById('loginFields').classList.remove('hidden');
+            document.getElementById('formTitle').innerText = "Hesabına Giriş Yap";
+          });
+        }
+
+
+        const backToEmail = document.getElementById('backToEmail');
+      if (backToEmail) {
+        backToEmail.addEventListener('click', function (e) {
+          e.preventDefault();  
+
+          document.getElementById('otpVerification').classList.add('hidden');
+          document.getElementById('otpVerification').classList.remove('show');
+
+          document.getElementById('loginFields').classList.add('show');
+          document.getElementById('loginFields').classList.remove('hidden');
+
+          document.getElementById('formTitle').innerText = "Hesabına Giriş Yap";
+        });
+      }
+
+          document.getElementById('sendCodeEmail').addEventListener('click', function () {
+          document.getElementById('formTitle').innerText = "Kodu Giriniz";
+          document.getElementById('forgotPasswordFields').classList.remove('show');
+          document.getElementById('forgotPasswordFields').classList.add('hidden');
+          document.getElementById('otpVerification').classList.remove('hidden');
+        });
+
+        document.getElementById('verifyOtp').addEventListener('click', function (e) {
+          e.preventDefault();
+          document.getElementById('otpVerification').classList.add('hidden');
+          document.getElementById('resetPasswordFields').classList.remove('hidden');
+        });
+
+        const sendCodeEmail = document.getElementById("sendCodeEmail");
+        if (sendCodeEmail) {
+      sendCodeEmail.addEventListener("click", function () {
+        var email = document.getElementById("emailInput").value;
+
+        fetch(`/User/SendMailCode/${email}`, {  
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Başarılı!',
+              text: data.messages
+            }).then(() => {
+              $.post('/Home/ClearTempData');
+            });
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Hata',
+              text: data.messages
+            });
+          }
+        })
+        .catch(error => {
+          console.error("Hata:", error);
+          Swal.fire({
+            icon: 'error',
+            title: 'Hata',
+            text: "Bir hata oluştu. Lütfen daha sonra tekrar deneyin."
+          });
+        });
+      });
+    }
+
+    const form = document.getElementById("verificationForm");
+    if (form) {
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const formData = new FormData(form);
+
+        const xhr = new XMLHttpRequest();
+        const url = "/User/VerifyMailCode";
+
+        xhr.open("POST", url, true);
+        xhr.onload = function () {
+          if (xhr.status === 200) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Başarılı',
+              text: "Doğrulama İşlemi Başarılı"
+            });
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Hata',
+              text: "Doğrulama İşlemi Başarısız"
+            });
+          }
+        };
+        xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+        xhr.send(formData);
+      });
+    } else {
+      console.error("Form with ID 'verificationForm' not found.");
+    }
+
+
+      });
+
+
+   
+
+    </script>
+
+
+    }
+    <!-- Preloader -->
+
+
+    <!-- Internet Connection Status -->
+    <div class="internet-connection-status" id="internetStatus"></div>
+
+    <!-- Back Button -->
+    <!-- Login Wrapper Area -->
+    <div class="login-wrapper d-flex align-items-center justify-content-center">
+      <div class="custom-container">
+        <div class="text-center px-4">
+          <img class="login-intro-img" src="~/assets/img/6681204.png" />
+        </div>
+
+        <div class="register-form mt-4 col-12">
+          <h4 id="formTitle" class="mb-3 text-center">Giriş Yap</h4>
+          <form asp-controller="Login" asp-action="LoginControl" method="post">
+            <div id="loginFields" class="show">
+              <div class="row">
+                <div class="col-12">
+                  <div class="form-group">
+                    <input class="form-control custom-input" type="text" name="LoginIdentifier" asp-for="LoginIdentifier" id="name" placeholder="Email">
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12">
+                  <div class="form-group position-relative">
+                    <input class="form-control custom-input" id="password" type="password" asp-for="Password" name="Password" placeholder="Şifre">
+                    <div class="position-absolute" id="password-visibility">
+                      <i class="bi bi-eye"></i>
+                      <i class="bi bi-eye-slash"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12">
+                  <button class="btn btn-primary w-100" type="submit">Giriş Yap</button>
+                </div>
+              </div>
+            </form>
+              <div class="login-meta-data text-center">
+                <a class="stretched-link forgot-password d-block mt-3 mb-1" id="forgotPasswordLink">
+                  Şifremi Unuttum?
+                </a>
+              </div>
+            </div>
+
+            <!-- E-posta Girişi -->
+            <div id="forgotPasswordFields" class="hidden">
+              <p>
+                <a href="#" id="backToLogin">
+                  <i class="bi bi-arrow-left"></i> <span style="color:black;">Geri</span>
+                </a>
+              </p>
+              <input type="email" name="Email" asp-for="Email" class="form-control custom-input" id="emailInput" placeholder="E-posta adresinizi giriniz">
+              <button type="button" id="sendCodeEmail" class="btn btn-primary w-100 mt-3">Gönder</button>
+            </div>
+
+            <!-- OTP Doğrulama -->
+            <div id="otpVerification" class="hidden">
+              <p>
+                <a href="#" id="backToEmail">
+                  <i class="bi bi-arrow-left"></i> <span style="color:black;">Geri</span>
+                </a>
+              </p>
+              <p>Emailinize Gelen Kodu Giriniz</p>
+                <form id="verificationForm">
+              <div class="input-group mb-3 otp-input-group">
+                <input class="form-control" type="number" maxlength="1" name="otpValue">
+                <input class="form-control" type="number" maxlength="1" name="otpValue1">
+                <input class="form-control" type="number" maxlength="1" name="otpValue2">
+                <input class="form-control" type="number" maxlength="1" name="otpValue3">
+              </div>
+              <button type="submit" class="btn btn-primary w-100" id="verifyOtp">Doğrula</button>
+               </form>
+            </div>
+
+            <!-- Yeni Şifre Belirleme -->
+            <div id="resetPasswordFields" class="hidden">
+              <input class="form-control custom-input" type="password" name="NewPassword" placeholder="Yeni Şifre">
+              <input class="form-control custom-input" type="password" name="ConfirmPassword" placeholder="Yeni Şifre Tekrar">
+              <button class="btn btn-primary w-100 mt-3">Şifreyi Güncelle</button>
+            </div>
+
+        </div>
+      </div>
+    </div>

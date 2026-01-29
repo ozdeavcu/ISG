@@ -1,0 +1,21 @@
+{
+  "ExtendedData": {
+    "inputs": [
+      "https://tckimlik.nvi.gov.tr/Service/KPSPublic.asmx"
+    ],
+    "collectionTypes": [
+      "System.Array",
+      "System.Collections.Generic.Dictionary`2"
+    ],
+    "namespaceMappings": [
+      "*, ServiceReference1"
+    ],
+    "references": [
+      "Microsoft.AspNetCore.Http.Features, {Microsoft.AspNetCore.Http.Features, 5.0.17}",
+      "Microsoft.Extensions.Primitives, {Microsoft.Extensions.Primitives, 5.0.1}",
+      "System.IO.Pipelines, {System.IO.Pipelines, 5.0.2}"
+    ],
+    "targetFramework": "net8.0",
+    "typeReuseMode": "All"
+  }
+}

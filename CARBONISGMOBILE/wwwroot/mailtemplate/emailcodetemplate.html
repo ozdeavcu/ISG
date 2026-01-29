@@ -1,0 +1,89 @@
+﻿<!doctype html>
+<html lang="tr">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <title>Email Doğrulama</title>
+  <style>
+    body {
+      font-family: Helvetica, sans-serif;
+      background-color: #f4f5f6;
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 80%;
+      margin: 0 auto;
+      padding: 48px;
+      background-color: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 12px 15px rgba(0, 0, 0, 0.02);
+    }
+
+    h2 {
+      color: #4CAF50;
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    p {
+      font-size: 16px;
+      color: #333;
+      text-align: center;
+    }
+
+    .otp-field {
+      flex-direction: row;
+      column-gap: 10px;
+      display: flex;
+      justify-content: center;
+      margin: 20px auto;
+    }
+
+      .otp-field div {
+        height: 45px;
+        width: 42px;
+        border-radius: 6px;
+        font-size: 1.125rem;
+        text-align: center;
+        line-height: 45px;
+        border: 1px solid #ddd;
+        background-color: #f7f7f7;
+      }
+
+    .footer {
+      text-align: center;
+      color: #9a9ea6;
+      font-size: 12px;
+      padding-top: 24px;
+    }
+
+      .footer p {
+        margin: 5px 0;
+      }
+
+    @media (min-width: 768px) {
+      .otp-field {
+        width: fit-content;
+        margin: 20px auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Email Doğrulama</h2>
+    <p>Kodunuz size e-posta yoluyla gönderildi.</p>
+    <div class="otp-field">
+      {{OTP_PLACEHOLDER}}
+    </div>
+    <p>Eğer daha fazla bilgiye ihtiyaç duyarsanız, aşağıdaki iletişim bilgilerimizi kullanarak bizimle iletişime geçebilirsiniz:</p>
+  </div>
+  <div class="footer">
+    <p>Bu e-posta size Obserway tarafından gönderilmiştir. Lütfen bu e-postaya yanıt vermeyin.</p>
+    <p>obserway@gmail.com | +0 (501) 068 23 93</p>
+  </div>
+</body>
+</html>
